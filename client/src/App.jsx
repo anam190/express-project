@@ -1,8 +1,12 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import "./App.css";
+import Login from "./Login";
 
 function App() {
+    const [isLoggedIn, setIsLoggedIn] = useState(
+    !!localStorage.getItem("token")
+  );
   const [users, setUsers] = useState([]);
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -171,15 +175,16 @@ function App() {
   };
 
   // FILTER USERS
-  const filteredUsers = users.filter(
+   const filteredUsers = users.filter(
     (user) =>
-      user.name
-        .toLowerCase()
-        .includes(search.toLowerCase()) ||
-      user.email
-        .toLowerCase()
-        .includes(search.toLowerCase())
+      user.name.toLowerCase().includes(search.toLowerCase()) ||
+      user.email.toLowerCase().includes(search.toLowerCase())
   );
+
+  // Show Login page if user is not logged in
+  if (!isLoggedIn) {
+    return <Login onLogin={() => setIsLoggedIn(true)} />;
+  }
 
   return (
     <div className="app-container">
